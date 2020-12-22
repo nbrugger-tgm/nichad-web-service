@@ -16,6 +16,9 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url("https://niton.jfrog.io/artifactory/java-libs/")
+	}
 }
 
 dependencies {
@@ -26,10 +29,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'mysql:mysql-connector-java'
-	runtimeOnly 'org.postgresql:postgresql'
+	//runtimeOnly 'mysql:mysql-connector-java'
+	//runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	implementation(group: 'com.niton', name: 'util', version: '0.1.+')
+	implementation(group: 'com.niton', name: 'j-auth', version: '0.1.+')
 }
 
 test {
