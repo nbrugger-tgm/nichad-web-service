@@ -17,29 +17,40 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class NiChadApplication implements WebMvcConfigurer {
 
+	public static final String USER_SESSION = "user_session";
+	@Autowired
+	private SessionHandler sessionHandler;
+	@Autowired
+	private RequestLimiter limiter;
+
 	public static void main(String[] args) {
 		Config.init("config.cfg");
 		Logging.init("web-service", "logging");
 		SpringApplication.run(NiChadApplication.class, args);
 	}
 
-	@Autowired
-	private SessionHandler sessionHandler;
-	@Autowired
-	private RequestLimiter limiter;
-
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(sessionHandler).addPathPatterns("/users/**").addPathPatterns("/chats/**").order(1);
-		registry.addInterceptor(limiter).addPathPatterns("/users/**").addPathPatterns("/chats/**").order(0);
+		registry.addInterceptor(sessionHandler)
+		        .addPathPatterns("/users/**")
+		        .addPathPatterns("/chats/**")
+		        .order(1);
+		registry.addInterceptor(limiter)
+		        .addPathPatterns("/users/**")
+		        .addPathPatterns("/chats/**")
+		        .order(0);
 	}
+
 	@Bean
 	public OpenAPI customOpenAPI() {
 		return new OpenAPI()
 				.components(new Components()
-						            .addSecuritySchemes("user-session",
-	                                new SecurityScheme().type(SecurityScheme.Type.APIKEY).name("X-SESSION").scheme("string").in(
-			                                SecurityScheme.In.HEADER)));
+						            .addSecuritySchemes(USER_SESSION,
+						                                new SecurityScheme().type(SecurityScheme.Type.APIKEY)
+						                                                    .name("X-SESSION")
+						                                                    .scheme("string")
+						                                                    .in(
+								                                                    SecurityScheme.In.HEADER)));
 	}
 
 }

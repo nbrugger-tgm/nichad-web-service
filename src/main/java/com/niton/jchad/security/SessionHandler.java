@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-public class SessionHandler implements HandlerInterceptor{
-	public final static String USER_ID = "uid",AUTHENTICATED = "authed";
+public class SessionHandler implements HandlerInterceptor {
+	public final static String USER_ID = "uid", AUTHENTICATED = "authed";
 
-	private AccountManager<User,HttpServletRequest> manager;
+	private AccountManager<User, HttpServletRequest> manager;
 
 	@Autowired
 	public SessionHandler(DatabaseAuthManager dbAuth) {
@@ -24,11 +24,12 @@ public class SessionHandler implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request,
 	                         HttpServletResponse response,
 	                         Object handler) {
-		User    user = manager.getAuthentication(request);
+		User    user   = manager.getAuthentication(request);
 		boolean authed = user != null;
-		request.setAttribute(AUTHENTICATED,authed);
-		if(authed)
+		request.setAttribute(AUTHENTICATED, authed);
+		if (authed) {
 			request.setAttribute(USER_ID, user.getId());
+		}
 		return true;
 	}
 

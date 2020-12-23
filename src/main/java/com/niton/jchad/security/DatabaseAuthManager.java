@@ -8,7 +8,6 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.naming.OperationNotSupportedException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -16,7 +15,7 @@ import static com.niton.util.Logging.LogContext.SECURITY;
 import static com.niton.util.Logging.log;
 
 @Component
-public class DatabaseAuthManager implements  AuthenticationHandler<User,HttpServletRequest> {
+public class DatabaseAuthManager implements AuthenticationHandler<User, HttpServletRequest> {
 
 	private final UserRepo repo;
 

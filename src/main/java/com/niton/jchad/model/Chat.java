@@ -3,12 +3,10 @@ package com.niton.jchad.model;
 import com.niton.jchad.verification.ValidName;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.RandomUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,17 +21,17 @@ public class Chat implements Serializable {
 	private String name;
 
 	@ManyToMany
-	@JoinTable(name="member")
+	@JoinTable(name = "member")
 	private Set<User> members;
 
 	@OneToMany(mappedBy = "chat")
 	private Set<Message> messages;
 
-	@Size(min=1024)
+	@Size(min = 1024)
 	private byte[] encryptionKey;
 
 
-	public boolean isMember(String id){
+	public boolean isMember(String id) {
 		return members.stream().map(User::getId).anyMatch(id::equals);
 	}
 }

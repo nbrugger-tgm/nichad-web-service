@@ -16,10 +16,6 @@ import com.niton.login.LoginResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,16 +35,16 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RestController()
 public class UserControllerImpl implements UserController {
 
-	private final UserRepo users;
-	@Autowired
-	private ImageService imageService;
-	@Autowired
-	private InvitationRepo invitations;
+	private final UserRepo                                 users;
 	private final AccountManager<User, HttpServletRequest> manager;
+	@Autowired
+	private       ImageService                             imageService;
+	@Autowired
+	private       InvitationRepo                           invitations;
 
 	@Autowired
 	public UserControllerImpl(UserRepo repo) {
-		this.users = repo;
+		this.users   = repo;
 		this.manager = new AccountManager<>(new DatabaseAuthManager(repo));
 	}
 
@@ -67,22 +63,25 @@ public class UserControllerImpl implements UserController {
 	}
 
 	@Override
-	public ResponseEntity<String> register(String id, @NotNull String displayName,String password) {
-		if(users.existsById(id))
+	public ResponseEntity<String> register(String id,
+	                                       @NotNull String displayName,
+	                                       String password) {
+		if (users.existsById(id)) {
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 		User u = new User();
 		u.setId(id);
 		u.setDisplayName(displayName);
 		u.setProfilePictureId(null);
-		manager.addAuthenticateable(u,password);
-		return new ResponseEntity<>(manager.getID(u.getId()),HttpStatus.CREATED);
+		manager.addAuthenticateable(u, password);
+		return new ResponseEntity<>(manager.getID(u.getId()), HttpStatus.CREATED);
 	}
 
 	@Override
 	public UserInformation getUser(String id, String me, @NotNull boolean authenticated) {
-		if(accessible(id, me, authenticated)) {
+		if (accessible(id, me, authenticated)) {
 			User u = users.getOne(id);
-			return new UserInformation(u.getDisplayName(),u.getProfilePictureId());
+			return new UserInformation(u.getDisplayName(), u.getProfilePictureId());
 		}
 		throw new HttpClientErrorException(UNAUTHORIZED);
 
@@ -96,12 +95,13 @@ public class UserControllerImpl implements UserController {
 	}
 
 	@Override
-	public LoginResponse login(String id, String password,HttpServletRequest request) {
-		LoginResult result = manager.authenticate(id,password,request.getRemoteAddr());
+	public LoginResponse login(String id, String password, HttpServletRequest request) {
+		LoginResult   result   = manager.authenticate(id, password, request.getRemoteAddr());
 		LoginResponse response = new LoginResponse().withResult(result);
 
-		if(result.success)
+		if (result.success) {
 			response.setSessionID(manager.getID(id));
+		}
 
 		return response;
 	}
@@ -111,11 +111,12 @@ public class UserControllerImpl implements UserController {
 	                                 MultipartFile multipartFile,
 	                                 String me,
 	                                 @NotNull boolean authenticated) {
-		if(isSelf(me, id, authenticated))
+		if (isSelf(me, id, authenticated)) {
 			throw new HttpClientErrorException(UNAUTHORIZED);
-		User u = users.getOne(id);
+		}
+		User   u     = users.getOne(id);
 		String oldId = u.getProfilePictureId();
-		if(oldId != null) {
+		if (oldId != null) {
 			try {
 				imageService.removeImage(oldId);
 			} catch (IOException e) {
@@ -124,7 +125,7 @@ public class UserControllerImpl implements UserController {
 		}
 		String newId = RandomStringUtils.randomAlphanumeric(32);
 		try {
-			imageService.saveFile(newId,multipartFile);
+			imageService.saveFile(newId, multipartFile);
 		} catch (IOException e) {
 			throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -138,8 +139,11 @@ public class UserControllerImpl implements UserController {
 	public StreamingResponseBody getProfileImage(String id,
 	                                             String me,
 	                                             @NotNull boolean authenticated) {
-		if(accessible(id,me,authenticated))
-			return outputStream -> IOUtils.copy(imageService.getImageInputStream(users.getOne(id).getProfilePictureId()),outputStream);
+		if (accessible(id, me, authenticated)) {
+			return outputStream -> IOUtils.copy(imageService.getImageInputStream(users.getOne(id)
+			                                                                          .getProfilePictureId()),
+			                                    outputStream);
+		}
 		throw new HttpClientErrorException(UNAUTHORIZED);
 	}
 
@@ -148,11 +152,13 @@ public class UserControllerImpl implements UserController {
 	                           @NotNull UserInformation update,
 	                           String me,
 	                           @NotNull boolean authenticated) {
-		if (isSelf(id, me, authenticated))
+		if (isSelf(id, me, authenticated)) {
 			throw new HttpClientErrorException(UNAUTHORIZED);
+		}
 		User u = users.getOne(id);
-		if(update.getDisplayName() != null)
+		if (update.getDisplayName() != null) {
 			u.setDisplayName(update.getDisplayName());
+		}
 		users.save(u);
 	}
 
@@ -162,8 +168,9 @@ public class UserControllerImpl implements UserController {
 
 	@Override
 	public Set<ChatResponse> findChats(String id, String me, @NotNull boolean authenticated) {
-		if(!isSelf(id,me,authenticated))
+		if (!isSelf(id, me, authenticated)) {
 			throw new HttpClientErrorException(UNAUTHORIZED);
+		}
 		return users.getOne(id)
 		            .getChats().stream()
 		            .map(UserControllerImpl::mapChat)
@@ -172,8 +179,9 @@ public class UserControllerImpl implements UserController {
 
 	@Override
 	public Set<Invitation> getInvitations(String user, String me, @NotNull boolean authenticated) {
-		if(!isSelf(user,me,authenticated))
+		if (!isSelf(user, me, authenticated)) {
 			throw new HttpClientErrorException(UNAUTHORIZED);
+		}
 		return invitations.findByUser(user);
 	}
 }

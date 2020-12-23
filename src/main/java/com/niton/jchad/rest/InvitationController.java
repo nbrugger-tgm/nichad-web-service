@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
+import static com.niton.jchad.NiChadApplication.USER_SESSION;
+
 public interface InvitationController {
 	@PutMapping("/chats/{chat}/invitations/{user}")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
@@ -44,6 +46,7 @@ public interface InvitationController {
 			@RequestAttribute(SessionHandler.AUTHENTICATED)
 					boolean authenticated
 	);
+
 	@DeleteMapping("/users/{user}/invitations/{chat}")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	HttpStatus discardInvitation(
@@ -60,6 +63,7 @@ public interface InvitationController {
 			@RequestAttribute(SessionHandler.AUTHENTICATED)
 					boolean authenticated
 	);
+
 	@PatchMapping("/users/{user}/invitations/{chat}")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	HttpStatus acceptInvitation(
@@ -76,14 +80,15 @@ public interface InvitationController {
 			@RequestAttribute(SessionHandler.AUTHENTICATED)
 					boolean authenticated
 	);
+
 	@DeleteMapping("/users/{user}/chats/{chat}")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	void leaveChat(
 			@PathVariable
 			@ValidId
-			String user,
+					String user,
 			@PathVariable
-			long chat,
+					long chat,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)

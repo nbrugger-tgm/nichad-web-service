@@ -32,13 +32,12 @@ public class Message implements Serializable {
 
 	@ManyToMany
 	private Set<User> readBy;
-
-	public boolean isReadByAll(){
-		return readBy.containsAll(chat.getMembers());
-	}
-
 	/**
 	 * Encrypted text
 	 */
-	private byte[]    text;
+	private byte[] text;
+
+	public boolean isReadByAll() {
+		return readBy.containsAll(chat.getMembers());
+	}
 }

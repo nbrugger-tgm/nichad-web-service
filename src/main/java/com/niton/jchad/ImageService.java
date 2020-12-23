@@ -1,7 +1,5 @@
 package com.niton.jchad;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +24,7 @@ public class ImageService {
 		}
 
 		try (InputStream inputStream = multipartFile.getInputStream()) {
-			Path filePath = folder.resolve(fileName+".png");
+			Path filePath = folder.resolve(fileName + ".png");
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException ioe) {
 			throw new IOException("Could not save image file: " + fileName, ioe);
@@ -34,12 +32,12 @@ public class ImageService {
 	}
 
 	public void removeImage(String oldId) throws IOException {
-		Path file = folder.resolve(oldId+".png");
+		Path file = folder.resolve(oldId + ".png");
 		Files.delete(file);
 	}
 
 	public InputStream getImageInputStream(String profilePictureId) throws IOException {
-		Path file = folder.resolve(profilePictureId+".png");
+		Path file = folder.resolve(profilePictureId + ".png");
 		return Files.newInputStream(file);
 	}
 }

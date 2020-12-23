@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageId implements Serializable {
-	private User sender;
+	private User      sender;
 	private LocalTime sendingTime;
-	private Chat chat;
+	private Chat      chat;
 }

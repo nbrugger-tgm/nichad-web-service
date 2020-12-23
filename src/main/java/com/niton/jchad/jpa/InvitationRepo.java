@@ -2,7 +2,6 @@ package com.niton.jchad.jpa;
 
 import com.niton.jchad.model.Invitation;
 import com.niton.jchad.model.InvitationId;
-import com.niton.jchad.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

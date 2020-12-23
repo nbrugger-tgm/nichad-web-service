@@ -1,8 +1,8 @@
 package com.niton.jchad.rest;
 
-import com.niton.jchad.security.SessionHandler;
 import com.niton.jchad.rest.model.ChatMetaData;
 import com.niton.jchad.rest.model.MessageResponse;
+import com.niton.jchad.security.SessionHandler;
 import com.niton.jchad.verification.ValidId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 import java.util.Set;
+
+import static com.niton.jchad.NiChadApplication.USER_SESSION;
 
 @RequestMapping("/chats")
 public interface ChatController {
@@ -30,123 +32,125 @@ public interface ChatController {
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	ChatMetaData getMetaData(
 			@PathVariable
-			long chat,
+					long chat,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)
-			String me,
+					String me,
 			@NotNull
 			@RequestAttribute(SessionHandler.AUTHENTICATED)
-			boolean authenticated
+					boolean authenticated
 	);
 
 
 	@PostMapping("{chat}/messages")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	void sendMessage(
-		@PathVariable
-		long chat,
-		@RequestBody
-		byte[] msg,
-		@Past
-		LocalDateTime sendingTime,
-		@ValidId
-		@Nullable
-		@RequestAttribute(SessionHandler.USER_ID)
-				String me,
-		@NotNull
-		@RequestAttribute(SessionHandler.AUTHENTICATED)
-				boolean authenticated
+			@PathVariable
+					long chat,
+			@RequestBody
+					byte[] msg,
+			@Past
+					LocalDateTime sendingTime,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@GetMapping("{chat}/messages/unread")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	Set<MessageResponse> pollMessages(
-		@PathVariable
-		long chat,
-		@ValidId
-		@Nullable
-		@RequestAttribute(SessionHandler.USER_ID)
-				String me,
-		@NotNull
-		@RequestAttribute(SessionHandler.AUTHENTICATED)
-				boolean authenticated
+			@PathVariable
+					long chat,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@GetMapping("{chat}/messages/")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	Set<MessageResponse> fetchMessages(
-		@PathVariable
-		long chat,
-		@RequestParam
-		LocalDateTime from,
-		@RequestParam
-		LocalDateTime to,
-		@ValidId
-		@Nullable
-		@RequestAttribute(SessionHandler.USER_ID)
-				String me,
-		@NotNull
-		@RequestAttribute(SessionHandler.AUTHENTICATED)
-				boolean authenticated
+			@PathVariable
+					long chat,
+			@RequestParam
+					LocalDateTime from,
+			@RequestParam
+					LocalDateTime to,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
+
 	@GetMapping("{chat}/messages/")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	Set<MessageResponse> fetchLastMessages(
-		@PathVariable
-		long chat,
-		@RequestParam
-		int count,
-		@ValidId
-		@Nullable
-		@RequestAttribute(SessionHandler.USER_ID)
-				String me,
-		@NotNull
-		@RequestAttribute(SessionHandler.AUTHENTICATED)
-				boolean authenticated
+			@PathVariable
+					long chat,
+			@RequestParam
+					int count,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 
 	@GetMapping("{chat}/messages/")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	Set<MessageResponse> fetchMessages(
-		@PathVariable
-		long chat,
-		@RequestParam
-		int from,
-		@RequestParam
-		int count,
-		@ValidId
-		@Nullable
-		@RequestAttribute(SessionHandler.USER_ID)
-				String me,
-		@NotNull
-		@RequestAttribute(SessionHandler.AUTHENTICATED)
-				boolean authenticated
+			@PathVariable
+					long chat,
+			@RequestParam
+					int from,
+			@RequestParam
+					int count,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
+
 	@GetMapping("{chat}/messages/last")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	MessageResponse fetchLastMessage(
-		@PathVariable
-		long chat,
-		@ValidId
-		@Nullable
-		@RequestAttribute(SessionHandler.USER_ID)
-				String me,
-		@NotNull
-		@RequestAttribute(SessionHandler.AUTHENTICATED)
-				boolean authenticated
+			@PathVariable
+					long chat,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@PatchMapping("{chat}/messages/{sender}")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	void markAsRead(
 			@PathVariable
-			long chat,
+					long chat,
 			@RequestParam
-			LocalDateTime msgSendingTime,
+					LocalDateTime msgSendingTime,
 			@PathVariable("sender")
-			String senderId,
+					String senderId,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)

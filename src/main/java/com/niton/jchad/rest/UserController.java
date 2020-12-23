@@ -1,10 +1,10 @@
 package com.niton.jchad.rest;
 
-import com.niton.jchad.security.SessionHandler;
 import com.niton.jchad.model.Invitation;
 import com.niton.jchad.rest.model.ChatResponse;
 import com.niton.jchad.rest.model.LoginResponse;
 import com.niton.jchad.rest.model.UserInformation;
+import com.niton.jchad.security.SessionHandler;
 import com.niton.jchad.verification.ValidId;
 import com.niton.jchad.verification.ValidName;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,46 +20,48 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
+import static com.niton.jchad.NiChadApplication.USER_SESSION;
+
 @RequestMapping("users")
 public interface UserController {
 
 	@PutMapping("{id}")
 	HttpEntity<String> register(
-		@PathVariable
-		@ValidId
-		String id,
-		@RequestParam
-		@NotNull
-		@ValidName
-		String displayName,
-		@RequestParam
-		@Size(min = 8,max = 128)
-		String password
+			@PathVariable
+			@ValidId
+					String id,
+			@RequestParam
+			@NotNull
+			@ValidName
+					String displayName,
+			@RequestParam
+			@Size(min = 8, max = 128)
+					String password
 	);
 
 	@GetMapping("{id}")
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	UserInformation getUser(
-		@PathVariable
-		@ValidId
-		String id,
-		@ValidId
-		@Nullable
-		@RequestAttribute(SessionHandler.USER_ID)
-				String me,
-		@NotNull
-		@RequestAttribute(SessionHandler.AUTHENTICATED)
-				boolean authenticated
+			@PathVariable
+			@ValidId
+					String id,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@GetMapping("{id}/session")
 	LoginResponse login(
-		@PathVariable
-		@ValidId
-		String id,
-		@RequestParam
-		String password,
-		HttpServletRequest request
+			@PathVariable
+			@ValidId
+					String id,
+			@RequestParam
+					String password,
+			HttpServletRequest request
 	);
 
 	@PostMapping("{id}/profile_image")
@@ -67,9 +69,9 @@ public interface UserController {
 	String changeProfileImage(
 			@PathVariable
 			@ValidId
-            String id,
+					String id,
 			@RequestParam("image")
-			MultipartFile multipartFile,
+					MultipartFile multipartFile,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)
@@ -84,7 +86,7 @@ public interface UserController {
 	StreamingResponseBody getProfileImage(
 			@PathVariable
 			@ValidId
-			String id,
+					String id,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)
@@ -99,10 +101,10 @@ public interface UserController {
 	void updateUserInfo(
 			@PathVariable
 			@ValidId
-			String id,
+					String id,
 			@NotNull
 			@RequestBody
-			UserInformation update,
+					UserInformation update,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)
@@ -116,8 +118,8 @@ public interface UserController {
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	Set<ChatResponse> findChats(
 			@PathVariable
-					@ValidId
-			String id,
+			@ValidId
+					String id,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)
@@ -131,8 +133,8 @@ public interface UserController {
 	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	Set<Invitation> getInvitations(
 			@PathVariable
-					@ValidId
-			String user,
+			@ValidId
+					String user,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)

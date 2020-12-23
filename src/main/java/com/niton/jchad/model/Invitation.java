@@ -6,7 +6,6 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -20,8 +19,8 @@ public class Invitation implements Serializable {
 
 	@EmbeddedId
 	private InvitationId id;
-	
-	@Size(max=500)
+
+	@Size(max = 500)
 	@Nullable
 	private String message;
 }

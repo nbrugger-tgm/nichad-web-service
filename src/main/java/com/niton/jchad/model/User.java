@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -21,16 +20,16 @@ public class User implements Serializable {
 	@Id
 	@ValidId
 	@NonNull
-	private String    id;
+	private String id;
 
 	@ValidName
 	@NotNull
-	private String    displayName;
+	private String displayName;
 
 	@ManyToMany(mappedBy = "members")
 	private Set<Chat> chats;
 
-	private String    profilePictureId;
+	private String profilePictureId;
 
 	//Todo: @NotNull Can be removed as soon as password sending per mail is enabled
 	@NotNull

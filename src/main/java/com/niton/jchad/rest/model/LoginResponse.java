@@ -10,5 +10,5 @@ import lombok.*;
 @NoArgsConstructor
 public class LoginResponse {
 	private LoginResult result;
-	private String sessionID;
+	private String      sessionID;
 }

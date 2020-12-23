@@ -16,7 +16,7 @@ public class ChatResponse {
 	private Set<UserInformation> members;
 	@Nullable
 	@ValidName
-	private String name;
+	private String               name;
 	@NotNull
-	private long id;
+	private long                 id;
 }

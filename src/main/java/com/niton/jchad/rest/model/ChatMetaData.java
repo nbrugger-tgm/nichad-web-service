@@ -10,6 +10,6 @@ import lombok.With;
 @With
 @AllArgsConstructor
 public class ChatMetaData {
-	private int members;
+	private int  members;
 	private long messageCount;
 }

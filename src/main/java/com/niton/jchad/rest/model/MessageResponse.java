@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 public class MessageResponse {
 	@NotNull
 	@NonNull
-	private byte[] text;
+	private byte[]          text;
 	@NotNull
 	@NonNull
-	private String senderId;
+	private String          senderId;
 	@Nullable
 	private MessageResponse referenceMessage;
 	@NotNull
 	@NonNull
-	private LocalDateTime sendingTime;
+	private LocalDateTime   sendingTime;
 }
