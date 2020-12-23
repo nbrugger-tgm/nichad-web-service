@@ -7,13 +7,14 @@ import org.apache.commons.lang3.RandomUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-public class Chat {
+public class Chat implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long ID;
