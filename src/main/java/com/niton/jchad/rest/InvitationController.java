@@ -1,6 +1,6 @@
 package com.niton.jchad.rest;
 
-import com.niton.jchad.SessionHandler;
+import com.niton.jchad.security.SessionHandler;
 import com.niton.jchad.verification.ValidId;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
