@@ -21,7 +21,7 @@ import java.util.Set;
 @RestController("/users")
 public interface UserController {
 
-	@PutMapping("/{id}")
+	@PutMapping("{id}")
 	HttpEntity<String> register(
 		@PathVariable
 		@ValidId
@@ -35,7 +35,7 @@ public interface UserController {
 		String password
 	);
 
-	@GetMapping("/{id}")
+	@GetMapping("{id}")
 	UserInformation getUser(
 		@PathVariable
 		@ValidId
@@ -49,7 +49,7 @@ public interface UserController {
 				boolean authenticated
 	);
 
-	@GetMapping("/{id}/session")
+	@GetMapping("{id}/session")
 	LoginResponse login(
 		@PathVariable
 		@ValidId
@@ -59,7 +59,7 @@ public interface UserController {
 		HttpServletRequest request
 	);
 
-	@PostMapping("/{id}/profile_image")
+	@PostMapping("{id}/profile_image")
 	String changeProfileImage(
 			@PathVariable
 			@ValidId
@@ -75,7 +75,7 @@ public interface UserController {
 					boolean authenticated
 	);
 
-	@GetMapping("/{id}/profile_image")
+	@GetMapping("{id}/profile_image")
 	StreamingResponseBody getProfileImage(
 			@PathVariable
 			@ValidId
@@ -89,7 +89,7 @@ public interface UserController {
 					boolean authenticated
 	);
 
-	@PostMapping("/{id}")
+	@PostMapping("{id}")
 	void updateUserInfo(
 			@PathVariable
 			@ValidId
@@ -106,7 +106,7 @@ public interface UserController {
 					boolean authenticated
 	);
 
-	@GetMapping("/{id}/chats")
+	@GetMapping("{id}/chats")
 	Set<ChatResponse> findChats(
 			@PathVariable
 					@ValidId
@@ -120,7 +120,7 @@ public interface UserController {
 					boolean authenticated
 	);
 
-	@GetMapping("/{user}/invitations")
+	@GetMapping("{user}/invitations")
 	Set<Invitation> getInvitations(
 			@PathVariable
 					@ValidId

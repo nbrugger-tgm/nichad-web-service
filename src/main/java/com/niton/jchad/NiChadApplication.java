@@ -26,7 +26,7 @@ public class NiChadApplication implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(sessionHandler).order(1);
-		registry.addInterceptor(limiter).order(0);
+		registry.addInterceptor(sessionHandler).addPathPatterns("/users/**").addPathPatterns("/chats/**").order(1);
+		registry.addInterceptor(limiter).addPathPatterns("/users/**").addPathPatterns("/chats/**").order(0);
 	}
 }

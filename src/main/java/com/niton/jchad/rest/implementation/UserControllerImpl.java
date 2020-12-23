@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+@RestController("/users")
 public class UserControllerImpl implements UserController {
 
 	private final UserRepo users;
