@@ -3,20 +3,22 @@ package com.niton.jchad.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-public class Message {
+@IdClass(MessageId.class)
+public class Message implements Serializable {
 	@Id
 	@ManyToOne(optional = false)
 	private Chat chat;
+
+	@Id
+	private LocalDateTime sendingTime;
 
 	@Id
 	@ManyToOne(optional = false)
@@ -27,8 +29,6 @@ public class Message {
 
 	private LocalDateTime receiveTime;
 
-	@Id
-	private LocalDateTime sendingTime;
 
 	@ManyToMany
 	private Set<User> readBy;

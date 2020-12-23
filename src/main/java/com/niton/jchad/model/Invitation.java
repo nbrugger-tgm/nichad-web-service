@@ -4,25 +4,22 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
-public class Invitation {
+public class Invitation implements Serializable {
 	@ManyToOne(optional = false)
 	private User from;
 
-	@Id
-	@ManyToOne(optional = false)
-	private User invited;
-
-	@Id
-	@ManyToOne(optional = false)
-	private Chat chat;
+	@EmbeddedId
+	private InvitationId id;
 	
 	@Size(max=500)
 	@Nullable
