@@ -19,7 +19,7 @@ import static com.niton.jchad.NiChadApplication.USER_SESSION;
 @RequestMapping("/chats")
 public interface ChatController {
 	@PutMapping
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	long createChat(@ValidId
 	                @Nullable
 	                @RequestAttribute(SessionHandler.USER_ID)
@@ -29,7 +29,7 @@ public interface ChatController {
 			                boolean authenticated);
 
 	@GetMapping("{chat}/meta")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	ChatMetaData getMetaData(
 			@PathVariable
 					long chat,
@@ -44,7 +44,7 @@ public interface ChatController {
 
 
 	@PostMapping("{chat}/messages")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	void sendMessage(
 			@PathVariable
 					long chat,
@@ -62,7 +62,7 @@ public interface ChatController {
 	);
 
 	@GetMapping("{chat}/messages/unread")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	Set<MessageResponse> pollMessages(
 			@PathVariable
 					long chat,
@@ -76,7 +76,7 @@ public interface ChatController {
 	);
 
 	@GetMapping("{chat}/messages/")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	Set<MessageResponse> fetchMessages(
 			@PathVariable
 					long chat,
@@ -94,7 +94,7 @@ public interface ChatController {
 	);
 
 	@GetMapping("{chat}/messages/")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	Set<MessageResponse> fetchLastMessages(
 			@PathVariable
 					long chat,
@@ -111,7 +111,7 @@ public interface ChatController {
 
 
 	@GetMapping("{chat}/messages/")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	Set<MessageResponse> fetchMessages(
 			@PathVariable
 					long chat,
@@ -129,7 +129,7 @@ public interface ChatController {
 	);
 
 	@GetMapping("{chat}/messages/last")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	MessageResponse fetchLastMessage(
 			@PathVariable
 					long chat,
@@ -143,7 +143,7 @@ public interface ChatController {
 	);
 
 	@PatchMapping("{chat}/messages/{sender}")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	void markAsRead(
 			@PathVariable
 					long chat,

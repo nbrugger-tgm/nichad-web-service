@@ -40,7 +40,7 @@ public interface UserController {
 	);
 
 	@GetMapping("{id}")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	UserInformation getUser(
 			@PathVariable
 			@ValidId
@@ -65,7 +65,7 @@ public interface UserController {
 	);
 
 	@PostMapping("{id}/profile_image")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	String changeProfileImage(
 			@PathVariable
 			@ValidId
@@ -82,7 +82,7 @@ public interface UserController {
 	);
 
 	@GetMapping("{id}/profile_image")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	StreamingResponseBody getProfileImage(
 			@PathVariable
 			@ValidId
@@ -97,7 +97,7 @@ public interface UserController {
 	);
 
 	@PostMapping("{id}")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	void updateUserInfo(
 			@PathVariable
 			@ValidId
@@ -115,7 +115,7 @@ public interface UserController {
 	);
 
 	@GetMapping("{id}/chats")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	Set<ChatResponse> findChats(
 			@PathVariable
 			@ValidId
@@ -130,7 +130,7 @@ public interface UserController {
 	);
 
 	@GetMapping("{user}/invitations")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	Set<Invitation> getInvitations(
 			@PathVariable
 			@ValidId

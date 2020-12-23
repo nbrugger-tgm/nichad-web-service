@@ -14,7 +14,7 @@ import static com.niton.jchad.NiChadApplication.USER_SESSION;
 
 public interface InvitationController {
 	@PutMapping("/chats/{chat}/invitations/{user}")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	HttpStatus invite(
 			@PathVariable
 					long chat,
@@ -31,7 +31,7 @@ public interface InvitationController {
 	);
 
 	@DeleteMapping("/chats/{chat}/invitations/{user}")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	HttpStatus cancelInvitation(
 			@PathVariable
 					long chat,
@@ -48,7 +48,7 @@ public interface InvitationController {
 	);
 
 	@DeleteMapping("/users/{user}/invitations/{chat}")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	HttpStatus discardInvitation(
 			@ValidId
 			@PathVariable
@@ -65,7 +65,7 @@ public interface InvitationController {
 	);
 
 	@PatchMapping("/users/{user}/invitations/{chat}")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	HttpStatus acceptInvitation(
 			@ValidId
 			@PathVariable
@@ -82,7 +82,7 @@ public interface InvitationController {
 	);
 
 	@DeleteMapping("/users/{user}/chats/{chat}")
-	@Operation(security = { @SecurityRequirement(name = "user-session") })
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	void leaveChat(
 			@PathVariable
 			@ValidId
