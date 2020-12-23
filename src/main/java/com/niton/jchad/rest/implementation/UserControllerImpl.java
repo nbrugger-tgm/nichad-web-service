@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-@RestController("/users")
+@RestController()
 public class UserControllerImpl implements UserController {
 
 	private final UserRepo users;

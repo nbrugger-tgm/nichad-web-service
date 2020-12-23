@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
-@RestController("/")
 public interface InvitationController {
 	@PutMapping("/chats/{chat}/invitations/{user}")
 	HttpStatus invite(
