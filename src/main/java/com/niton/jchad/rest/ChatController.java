@@ -12,7 +12,7 @@ import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@RestController("/chats/")
+@RequestMapping("/chats")
 public interface ChatController {
 	@PutMapping
 	long createChat();
