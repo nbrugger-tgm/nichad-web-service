@@ -22,10 +22,20 @@ public class ImageService {
 		}
 
 		try (InputStream inputStream = multipartFile.getInputStream()) {
-			Path filePath = folder.resolve(fileName);
+			Path filePath = folder.resolve(fileName+".png");
 			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException ioe) {
 			throw new IOException("Could not save image file: " + fileName, ioe);
 		}
+	}
+
+	public void removeImage(String oldId) throws IOException {
+		Path file = folder.resolve(oldId+".png");
+		Files.delete(file);
+	}
+
+	public InputStream getImageInputStream(String profilePictureId) throws IOException {
+		Path file = folder.resolve(profilePictureId+".png");
+		return Files.newInputStream(file);
 	}
 }

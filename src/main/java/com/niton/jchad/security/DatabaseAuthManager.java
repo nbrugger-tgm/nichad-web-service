@@ -16,20 +16,24 @@ import static com.niton.util.Logging.LogContext.SECURITY;
 import static com.niton.util.Logging.log;
 
 @Component
-public class DatabaseAuthManager implements  AuthenticationHandler<String,HttpServletRequest> {
+public class DatabaseAuthManager implements  AuthenticationHandler<User,HttpServletRequest> {
+
+	private final UserRepo repo;
 
 	@Autowired
-	private UserRepo repo;
+	public DatabaseAuthManager(UserRepo repo) {
+		this.repo = repo;
+	}
 
 	@Override
-	public void sendInitPassword(String password, String user) {
+	public void sendInitPassword(String password, User user) {
 		log(Logging.Level.WARNING, "Email sending is not possible right now");
 	}
 
 	@Override
-	public void persistAuthenticateable(String user, byte[] hash) {
-		User u = new User(user,hash);
-		repo.save(u);
+	public void persistAuthenticateable(User user, byte[] hash) {
+		user.setHash(hash);
+		repo.save(user);
 	}
 
 	@Override
@@ -48,8 +52,8 @@ public class DatabaseAuthManager implements  AuthenticationHandler<String,HttpSe
 	}
 
 	@Override
-	public String getAuthenticateable(String u) {
-		return u;
+	public User getAuthenticateable(String u) {
+		return repo.findById(u).orElse(null);
 	}
 
 	@Override
