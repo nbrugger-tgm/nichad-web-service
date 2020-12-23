@@ -1,14 +1,16 @@
 package com.niton.jchad.model;
 
-import lombok.*;
-import org.springframework.lang.Nullable;
+import com.niton.jchad.verification.ValidId;
+import com.niton.jchad.verification.ValidName;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -17,18 +19,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class User {
 	@Id
+	@ValidId
+	private String    id;
+
+	@ValidName
+	private String    displayName;
+
+	@ManyToMany(mappedBy = "members")
+	@JoinTable(name="member")
+	private Set<Chat> chats;
+
+	private String    profilePictureId;
+
+	//Todo: @NotNull Can be removed as soon as password sending per mail is enabled
 	@NotNull
-	@NonNull
-	private String id;
-	private String displayName;
-	@OneToMany
-	private List<Chat> contacts;
-	@Nullable
-	private String profilePictureId;
-	@ManyToMany
-	private List<User> pendingAddingRequests;
-	@NotNull
-	@NonNull
 	private byte[] hash;
 
 }
