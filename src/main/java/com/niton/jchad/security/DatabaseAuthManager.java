@@ -1,4 +1,4 @@
-package com.niton.jchad;
+package com.niton.jchad.security;
 
 import com.niton.jauth.AuthenticationHandler;
 import com.niton.jchad.jpa.UserRepo;

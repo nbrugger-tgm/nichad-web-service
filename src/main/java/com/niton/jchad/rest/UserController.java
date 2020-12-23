@@ -1,6 +1,6 @@
 package com.niton.jchad.rest;
 
-import com.niton.jchad.SessionHandler;
+import com.niton.jchad.security.SessionHandler;
 import com.niton.jchad.model.Invitation;
 import com.niton.jchad.rest.model.ChatResponse;
 import com.niton.jchad.rest.model.LoginResponse;
@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.validation.constraints.NotNull;
-import javax.websocket.server.PathParam;
 import java.util.Set;
 
 @RestController("/users")

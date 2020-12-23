@@ -1,4 +1,4 @@
-package com.niton.jchad;
+package com.niton.jchad.security;
 
 import com.niton.jauth.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
