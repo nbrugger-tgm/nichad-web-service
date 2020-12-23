@@ -4,9 +4,13 @@ import com.niton.jchad.security.RequestLimiter;
 import com.niton.jchad.security.SessionHandler;
 import com.niton.util.Logging;
 import com.niton.util.config.Config;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -29,4 +33,13 @@ public class NiChadApplication implements WebMvcConfigurer {
 		registry.addInterceptor(sessionHandler).addPathPatterns("/users/**").addPathPatterns("/chats/**").order(1);
 		registry.addInterceptor(limiter).addPathPatterns("/users/**").addPathPatterns("/chats/**").order(0);
 	}
+	@Bean
+	public OpenAPI customOpenAPI() {
+		return new OpenAPI()
+				.components(new Components()
+						            .addSecuritySchemes("user-session",
+	                                new SecurityScheme().type(SecurityScheme.Type.APIKEY).name("X-SESSION").scheme("string").in(
+			                                SecurityScheme.In.HEADER)));
+	}
+
 }

@@ -7,6 +7,8 @@ import com.niton.jchad.rest.model.LoginResponse;
 import com.niton.jchad.rest.model.UserInformation;
 import com.niton.jchad.verification.ValidId;
 import com.niton.jchad.verification.ValidName;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,7 @@ public interface UserController {
 	);
 
 	@GetMapping("{id}")
+	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	UserInformation getUser(
 		@PathVariable
 		@ValidId
@@ -60,6 +63,7 @@ public interface UserController {
 	);
 
 	@PostMapping("{id}/profile_image")
+	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	String changeProfileImage(
 			@PathVariable
 			@ValidId
@@ -76,6 +80,7 @@ public interface UserController {
 	);
 
 	@GetMapping("{id}/profile_image")
+	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	StreamingResponseBody getProfileImage(
 			@PathVariable
 			@ValidId
@@ -90,6 +95,7 @@ public interface UserController {
 	);
 
 	@PostMapping("{id}")
+	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	void updateUserInfo(
 			@PathVariable
 			@ValidId
@@ -107,6 +113,7 @@ public interface UserController {
 	);
 
 	@GetMapping("{id}/chats")
+	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	Set<ChatResponse> findChats(
 			@PathVariable
 					@ValidId
@@ -121,6 +128,7 @@ public interface UserController {
 	);
 
 	@GetMapping("{user}/invitations")
+	@Operation(security = { @SecurityRequirement(name = "user-session") })
 	Set<Invitation> getInvitations(
 			@PathVariable
 					@ValidId
