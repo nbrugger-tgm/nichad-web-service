@@ -1,8 +1,12 @@
 package com.niton.jchad.rest;
 
+import com.niton.jchad.SessionHandler;
 import com.niton.jchad.verification.ValidId;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotNull;
 
 @RestController("/")
 public interface InvitationController {
@@ -12,7 +16,14 @@ public interface InvitationController {
 					long chat,
 			@PathVariable
 			@ValidId
-					String user
+					String user,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@DeleteMapping("/chats/{chat}/invitations/{user}")
@@ -21,7 +32,14 @@ public interface InvitationController {
 					long chat,
 			@PathVariable
 			@ValidId
-					String user
+					String user,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 	@DeleteMapping("/users/{user}/invitations/{chat}")
 	HttpStatus discardInvitation(
@@ -29,7 +47,14 @@ public interface InvitationController {
 			@PathVariable
 					String user,
 			@PathVariable
-					long chat
+					long chat,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 	@PatchMapping("/users/{user}/invitations/{chat}")
 	HttpStatus acceptInvitation(
@@ -37,7 +62,14 @@ public interface InvitationController {
 			@PathVariable
 					String user,
 			@PathVariable
-					long chat
+					long chat,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 	@DeleteMapping("/users/{user}/chats/{chat}")
 	void leaveChat(
@@ -45,6 +77,13 @@ public interface InvitationController {
 			@ValidId
 			String user,
 			@PathVariable
-			long chat
+			long chat,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 }

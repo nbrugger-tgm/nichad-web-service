@@ -1,11 +1,13 @@
 package com.niton.jchad.rest;
 
+import com.niton.jchad.SessionHandler;
 import com.niton.jchad.model.Invitation;
 import com.niton.jchad.rest.model.ChatResponse;
 import com.niton.jchad.rest.model.LoginResponse;
 import com.niton.jchad.rest.model.UserInformation;
 import com.niton.jchad.verification.ValidId;
 import com.niton.jchad.verification.ValidName;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -32,7 +34,14 @@ public interface UserController {
 	UserInformation getUser(
 		@PathVariable
 		@ValidId
-		String id
+		String id,
+		@ValidId
+		@Nullable
+		@RequestAttribute(SessionHandler.USER_ID)
+				String me,
+		@NotNull
+		@RequestAttribute(SessionHandler.AUTHENTICATED)
+				boolean authenticated
 	);
 
 	@GetMapping("/{id}/session")
@@ -50,14 +59,28 @@ public interface UserController {
 			@ValidId
             String id,
 			@RequestParam("image")
-			MultipartFile multipartFile
+			MultipartFile multipartFile,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@GetMapping("/{id}/profile_image")
 	StreamingResponseBody getProfileImage(
 			@PathVariable
 			@ValidId
-			String id
+			String id,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@PostMapping("/{id}")
@@ -67,18 +90,41 @@ public interface UserController {
 			String id,
 			@NotNull
 			@RequestBody
-			UserInformation update
+			UserInformation update,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@GetMapping("/{id}/chats")
 	Set<ChatResponse> findChats(
 			@PathVariable
-			String id
+					@ValidId
+			String id,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 
 	@GetMapping("/{user}/invitations")
 	Set<Invitation> getInvitations(
 			@PathVariable
-			String user
+					@ValidId
+			String user,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 }

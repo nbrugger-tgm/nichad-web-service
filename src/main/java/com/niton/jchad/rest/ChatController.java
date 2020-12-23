@@ -1,9 +1,13 @@
 package com.niton.jchad.rest;
 
+import com.niton.jchad.SessionHandler;
 import com.niton.jchad.rest.model.ChatMetaData;
 import com.niton.jchad.rest.model.MessageResponse;
+import com.niton.jchad.verification.ValidId;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -16,7 +20,14 @@ public interface ChatController {
 	@GetMapping("{chat}/meta")
 	ChatMetaData getMetaData(
 			@PathVariable
-			long chat
+			long chat,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+			String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+			boolean authenticated
 	);
 
 
@@ -27,13 +38,27 @@ public interface ChatController {
 		@RequestBody
 		byte[] msg,
 		@Past
-		LocalDateTime sendingTime
+		LocalDateTime sendingTime,
+		@ValidId
+		@Nullable
+		@RequestAttribute(SessionHandler.USER_ID)
+				String me,
+		@NotNull
+		@RequestAttribute(SessionHandler.AUTHENTICATED)
+				boolean authenticated
 	);
 
 	@GetMapping("{chat}/messages/unread")
 	Set<MessageResponse> pollMessages(
 		@PathVariable
-		long chat
+		long chat,
+		@ValidId
+		@Nullable
+		@RequestAttribute(SessionHandler.USER_ID)
+				String me,
+		@NotNull
+		@RequestAttribute(SessionHandler.AUTHENTICATED)
+				boolean authenticated
 	);
 
 	@GetMapping("{chat}/messages/")
@@ -43,14 +68,28 @@ public interface ChatController {
 		@RequestParam
 		LocalDateTime from,
 		@RequestParam
-		LocalDateTime to
+		LocalDateTime to,
+		@ValidId
+		@Nullable
+		@RequestAttribute(SessionHandler.USER_ID)
+				String me,
+		@NotNull
+		@RequestAttribute(SessionHandler.AUTHENTICATED)
+				boolean authenticated
 	);
 	@GetMapping("{chat}/messages/")
 	Set<MessageResponse> fetchLastMessages(
 		@PathVariable
 		long chat,
 		@RequestParam
-		int count
+		int count,
+		@ValidId
+		@Nullable
+		@RequestAttribute(SessionHandler.USER_ID)
+				String me,
+		@NotNull
+		@RequestAttribute(SessionHandler.AUTHENTICATED)
+				boolean authenticated
 	);
 
 
@@ -61,12 +100,26 @@ public interface ChatController {
 		@RequestParam
 		int from,
 		@RequestParam
-		int count
+		int count,
+		@ValidId
+		@Nullable
+		@RequestAttribute(SessionHandler.USER_ID)
+				String me,
+		@NotNull
+		@RequestAttribute(SessionHandler.AUTHENTICATED)
+				boolean authenticated
 	);
 	@GetMapping("{chat}/messages/last")
 	MessageResponse fetchLastMessage(
 		@PathVariable
-		long chat
+		long chat,
+		@ValidId
+		@Nullable
+		@RequestAttribute(SessionHandler.USER_ID)
+				String me,
+		@NotNull
+		@RequestAttribute(SessionHandler.AUTHENTICATED)
+				boolean authenticated
 	);
 
 	@PatchMapping("{chat}/messages/{sender}")
@@ -76,6 +129,13 @@ public interface ChatController {
 			@RequestParam
 			LocalDateTime msgSendingTime,
 			@PathVariable("sender")
-			String senderId
+			String senderId,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
 	);
 }

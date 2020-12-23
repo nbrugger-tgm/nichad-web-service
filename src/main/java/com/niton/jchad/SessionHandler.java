@@ -11,9 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class SessionHandler implements HandlerInterceptor{
 	public final static String USER_ID = "uid",AUTHENTICATED = "authed";
+
+	private AccountManager<String,HttpServletRequest> manager;
+
 	@Autowired
-	private DatabaseAuthManager dbAuth;
-	private AccountManager<String,HttpServletRequest> manager = new AccountManager<>(dbAuth);
+	public SessionHandler(DatabaseAuthManager dbAuth) {
+		manager = new AccountManager<>(dbAuth);
+	}
+
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 	                         HttpServletResponse response,
