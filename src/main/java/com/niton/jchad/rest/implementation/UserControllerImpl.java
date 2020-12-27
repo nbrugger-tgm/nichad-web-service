@@ -12,6 +12,7 @@ import com.niton.jchad.rest.model.ChatResponse;
 import com.niton.jchad.rest.model.LoginResponse;
 import com.niton.jchad.rest.model.UserInformation;
 import com.niton.jchad.security.DatabaseAuthManager;
+import com.niton.jchad.security.SessionHandler;
 import com.niton.login.LoginResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -24,8 +25,10 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,7 +39,6 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class UserControllerImpl implements UserController {
 
 	private final UserRepo                                 users;
-	private final AccountManager<User, HttpServletRequest> manager;
 	@Autowired
 	private       ImageService                             imageService;
 	@Autowired
@@ -45,7 +47,6 @@ public class UserControllerImpl implements UserController {
 	@Autowired
 	public UserControllerImpl(UserRepo repo) {
 		this.users   = repo;
-		this.manager = new AccountManager<>(new DatabaseAuthManager(repo));
 	}
 
 	private static UserInformation toUserInformation(User m) {
@@ -73,8 +74,8 @@ public class UserControllerImpl implements UserController {
 		u.setId(id);
 		u.setDisplayName(displayName);
 		u.setProfilePictureId(null);
-		manager.addAuthenticateable(u, password);
-		return new ResponseEntity<>(manager.getID(u.getId()), HttpStatus.CREATED);
+		SessionHandler.manager.addAuthenticateable(u, password);
+		return new ResponseEntity<>(SessionHandler.manager.getID(u.getId()), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -88,6 +89,7 @@ public class UserControllerImpl implements UserController {
 	}
 
 	private boolean accessible(String id, String me, boolean authenticated) {
+		System.out.println("id = " + id + ", me = " + me + ", authenticated = " + authenticated);
 		return authenticated && (id.equals(me) || users.getOne(me)
 		                                               .getChats()
 		                                               .stream()
@@ -96,11 +98,11 @@ public class UserControllerImpl implements UserController {
 
 	@Override
 	public LoginResponse login(String id, String password, HttpServletRequest request) {
-		LoginResult   result   = manager.authenticate(id, password, request.getRemoteAddr());
+		LoginResult   result   = SessionHandler.manager.authenticate(id, password, request.getRemoteAddr());
 		LoginResponse response = new LoginResponse().withResult(result);
 
 		if (result.success) {
-			response.setSessionID(manager.getID(id));
+			response.setSessionID(SessionHandler.manager.getID(id));
 		}
 
 		return response;
@@ -140,9 +142,16 @@ public class UserControllerImpl implements UserController {
 	                                             String me,
 	                                             @NotNull boolean authenticated) {
 		if (accessible(id, me, authenticated)) {
-			return outputStream -> IOUtils.copy(imageService.getImageInputStream(users.getOne(id)
-			                                                                          .getProfilePictureId()),
-			                                    outputStream);
+			User u = users.getOne(id);
+			if(imageService.hasImage(u))
+				return outputStream -> IOUtils.copy(
+					imageService.getImageInputStream(u.getProfilePictureId()),
+					outputStream
+				);
+			else{
+				final BufferedImage renderedImage = imageService.render(u.getDisplayName());
+				return outputStream -> ImageIO.write(renderedImage,"jpeg", outputStream);
+			}
 		}
 		throw new HttpClientErrorException(UNAUTHORIZED);
 	}

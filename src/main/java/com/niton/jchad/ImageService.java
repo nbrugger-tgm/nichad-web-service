@@ -1,8 +1,11 @@
 package com.niton.jchad;
 
+import com.niton.jchad.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -39,5 +42,27 @@ public class ImageService {
 	public InputStream getImageInputStream(String profilePictureId) throws IOException {
 		Path file = folder.resolve(profilePictureId + ".png");
 		return Files.newInputStream(file);
+	}
+
+	public boolean hasImage(User id) {
+		return Files.exists(folder.resolve(id.getProfilePictureId()+".png"));
+	}
+
+	public BufferedImage render(String displayName) {
+		BufferedImage image = new BufferedImage(80,80,BufferedImage.TYPE_INT_RGB);
+		Graphics      graphics = image.getGraphics();
+		char c = Character.toUpperCase(displayName.charAt(0));
+		int
+				r = (int) (Math.pow(2, c)%255),
+				g = (int) (Math.pow(c, c)%255),
+				b = (int) (Math.pow(c, 2)%255);
+		boolean darkText = (r+g+b)/3 > (255/3)*2;
+		graphics.setColor(new Color(r,g,b));
+		graphics.fillRect(0,0,80,80);
+		graphics.setColor(darkText?Color.DARK_GRAY:Color.WHITE);
+		graphics.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 70));
+		graphics.drawChars(new char[]{c},0,1,20,60);
+		graphics.dispose();
+		return image;
 	}
 }

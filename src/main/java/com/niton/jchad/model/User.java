@@ -36,4 +36,8 @@ public class User implements Serializable {
 	@NonNull
 	private byte[] hash;
 
+	@Override
+	public String toString() {
+		return String.format("%s(%s)", getDisplayName(), getId());
+	}
 }

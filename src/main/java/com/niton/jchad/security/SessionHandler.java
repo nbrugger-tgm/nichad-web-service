@@ -8,23 +8,31 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @Component
 public class SessionHandler implements HandlerInterceptor {
 	public final static String USER_ID = "uid", AUTHENTICATED = "authed";
 
-	private AccountManager<User, HttpServletRequest> manager;
+	public static AccountManager<User, HttpServletRequest> manager;
+	private final DatabaseAuthManager dbAuth;
 
 	@Autowired
 	public SessionHandler(DatabaseAuthManager dbAuth) {
-		manager = new AccountManager<>(dbAuth);
+		System.out.println("Create Session handler");
+		if(manager == null)
+			manager= new AccountManager<>(dbAuth);
+		this.dbAuth = dbAuth;
 	}
 
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 	                         HttpServletResponse response,
-	                         Object handler) {
-		User    user   = manager.getAuthentication(request);
+	                                            Object handler) {
+		User    user = null;
+		if(dbAuth.getContextAuthInfo(request) != null && dbAuth.getContextAuthInfo(request).length() != 0)
+		   user = manager.getAuthentication(request);
 		boolean authed = user != null;
 		request.setAttribute(AUTHENTICATED, authed);
 		if (authed) {

@@ -47,7 +47,7 @@ public class DatabaseAuthManager implements AuthenticationHandler<User, HttpServ
 
 	@Override
 	public String getContextAuthInfo(HttpServletRequest context) {
-		return context.getHeader("X-AUTH-SESSION");
+		return context.getHeader("X-SESSION");
 	}
 
 	@Override

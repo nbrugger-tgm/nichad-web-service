@@ -28,9 +28,9 @@ public class RequestLimiter implements HandlerInterceptor {
 	                         Object handler) throws Exception {
 		String ip        = request.getRemoteAddr();
 		long   timeStamp = System.currentTimeMillis();
-		if (timeStamp - lastRequest.getOrDefault(ip, 0L) < REQUEST_DELAY_MS) {
-			throw new RateLimitException("Request to fast");
-		}
+//		if (timeStamp - lastRequest.getOrDefault(ip, 0L) < REQUEST_DELAY_MS) {
+//			throw new RateLimitException("Request to fast");
+//		}
 		intervallRequestCount.put(ip, intervallRequestCount.getOrDefault(ip, 0) + 1);
 		todayRequests.put(ip, todayRequests.getOrDefault(ip, 0L) + 1);
 		lastRequest.put(ip, timeStamp);
