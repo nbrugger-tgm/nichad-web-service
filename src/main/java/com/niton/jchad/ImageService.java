@@ -50,7 +50,8 @@ public class ImageService {
 
 	public BufferedImage render(String displayName) {
 		BufferedImage image = new BufferedImage(80,80,BufferedImage.TYPE_INT_RGB);
-		Graphics      graphics = image.getGraphics();
+		Graphics2D      graphics = (Graphics2D) image.getGraphics();
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		char c = Character.toUpperCase(displayName.charAt(0));
 		int
 				r = (int) (Math.pow(2, c)%255),
@@ -60,7 +61,7 @@ public class ImageService {
 		graphics.setColor(new Color(r,g,b));
 		graphics.fillRect(0,0,80,80);
 		graphics.setColor(darkText?Color.DARK_GRAY:Color.WHITE);
-		graphics.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 70));
+		graphics.setFont(new Font(Font.MONOSPACED, Font.BOLD, 70));
 		graphics.drawChars(new char[]{c},0,1,20,60);
 		graphics.dispose();
 		return image;
