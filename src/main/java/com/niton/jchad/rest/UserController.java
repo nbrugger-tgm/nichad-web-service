@@ -143,4 +143,32 @@ public interface UserController {
 			@RequestAttribute(SessionHandler.AUTHENTICATED)
 					boolean authenticated
 	);
+
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
+	@GetMapping("{user}/authentication")
+	boolean testAuthenticationStatus(
+			@PathVariable
+			@ValidId
+					String user,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
+	);
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
+	@DeleteMapping("{user}/authentication")
+	void removeAuthentication(
+			@PathVariable
+			@ValidId
+					String user,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					@NotNull boolean authenticated
+	);
 }
