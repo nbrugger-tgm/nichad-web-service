@@ -8,19 +8,28 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
 public class RequestLimiter implements HandlerInterceptor {
 
-	public static int DAILY_REQUESTS               = 10000;
-	public static int REQUEST_DELAY_MS             = 10;
-	public static int REQUESTS_PER_INTERVAL        = 40;
-	public static int REQUEST_INTERVAL_DURATION_MS = 1000 * 60;
+	public final int DAILY_REQUESTS               ;
+	public final int REQUEST_DELAY_MS             ;
+	public final int REQUESTS_PER_INTERVAL        ;
+	public final int REQUEST_INTERVAL_DURATION_MS ;
 
 
 	private final Map<String, Long>    lastRequest           = new HashMap<>();
 	private final Map<String, Long>    intervalEnd           = new HashMap<>();
 	private final Map<String, Integer> intervallRequestCount = new HashMap<>();
 	private final Map<String, Long>    todayRequests         = new HashMap<>();
+
+	public RequestLimiter(int daily_requests,
+	                      int request_delay_ms,
+	                      int requests_per_interval,
+	                      int request_interval_duration_ms) {
+		DAILY_REQUESTS               = daily_requests;
+		REQUEST_DELAY_MS             = request_delay_ms;
+		REQUESTS_PER_INTERVAL        = requests_per_interval;
+		REQUEST_INTERVAL_DURATION_MS = request_interval_duration_ms;
+	}
 
 	@Override
 	public boolean preHandle(HttpServletRequest request,

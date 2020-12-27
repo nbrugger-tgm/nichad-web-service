@@ -43,7 +43,7 @@ public interface ChatController {
 	);
 
 
-	@PostMapping("{chat}/messages")
+	@PostMapping("{chat}/messages/{sendingTime}")
 	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	void sendMessage(
 			@PathVariable
@@ -51,6 +51,7 @@ public interface ChatController {
 			@RequestBody
 					byte[] msg,
 			@Past
+			@PathVariable
 					LocalDateTime sendingTime,
 			@ValidId
 			@Nullable

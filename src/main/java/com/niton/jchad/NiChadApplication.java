@@ -22,8 +22,6 @@ public class NiChadApplication implements WebMvcConfigurer {
 	public static final String USER_SESSION = "user_session";
 	@Autowired
 	private SessionHandler sessionHandler;
-	@Autowired
-	private RequestLimiter limiter;
 
 	public static void main(String[] args) {
 		Config.init("config.cfg");
@@ -36,11 +34,16 @@ public class NiChadApplication implements WebMvcConfigurer {
 		registry.addInterceptor(sessionHandler)
 		        .addPathPatterns("/users/**")
 		        .addPathPatterns("/chats/**")
-		        .order(1);
-		registry.addInterceptor(limiter)
-		        .addPathPatterns("/users/**")
-		        .addPathPatterns("/chats/**")
+		        .order(3);
+		registry.addInterceptor(new RequestLimiter(50000,0,30,10000))
+		        .addPathPatterns("/**")
 		        .order(0);
+		registry.addInterceptor(new RequestLimiter(10000, 500,20,60*1000))
+		        .addPathPatterns("/chats/*/messages/*")
+		        .order(1);
+		registry.addInterceptor(new RequestLimiter(100,1000,5,60*1000))
+		        .addPathPatterns("/users/*/")
+		        .order(2);
 	}
 
 	@Bean
