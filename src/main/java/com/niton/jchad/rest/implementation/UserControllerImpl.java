@@ -1,6 +1,5 @@
 package com.niton.jchad.rest.implementation;
 
-import com.niton.jauth.AccountManager;
 import com.niton.jchad.ImageService;
 import com.niton.jchad.jpa.InvitationRepo;
 import com.niton.jchad.jpa.UserRepo;
@@ -11,7 +10,6 @@ import com.niton.jchad.rest.UserController;
 import com.niton.jchad.rest.model.ChatResponse;
 import com.niton.jchad.rest.model.LoginResponse;
 import com.niton.jchad.rest.model.UserInformation;
-import com.niton.jchad.security.DatabaseAuthManager;
 import com.niton.jchad.security.SessionHandler;
 import com.niton.login.LoginResult;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -192,5 +190,17 @@ public class UserControllerImpl implements UserController {
 			throw new HttpClientErrorException(UNAUTHORIZED);
 		}
 		return invitations.findByUser(user);
+	}
+
+	@Override
+	public boolean testAuthenticationStatus(String user,
+	                                        String me,
+	                                        @NotNull boolean authenticated) {
+		return isSelf(user,me,authenticated);
+	}
+
+	@Override
+	public void removeAuthentication(String user, String me, @NotNull boolean authenticated) {
+		SessionHandler.manager.logout(user);
 	}
 }
