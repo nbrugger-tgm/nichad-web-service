@@ -1,26 +1,37 @@
 package com.niton.jchad.model;
 
+import com.niton.jchad.verification.ValidName;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import java.util.List;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-public class Chat {
+public class Chat implements Serializable {
 	@Id
-	@OneToOne
-	private User u1;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long ID;
 
-	@Id
-	@OneToOne
-	private User u2;
+	@ValidName
+	private String name;
 
-	@OneToMany
-	private List<Message> messages;
+	@ManyToMany
+	@JoinTable(name = "member")
+	private Set<User> members;
+
+	@OneToMany(mappedBy = "chat")
+	private Set<Message> messages;
+
+	@Size(min = 1024)
+	private byte[] encryptionKey;
+
+
+	public boolean isMember(String id) {
+		return members.stream().map(User::getId).anyMatch(id::equals);
+	}
 }

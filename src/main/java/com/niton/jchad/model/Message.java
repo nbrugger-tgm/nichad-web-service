@@ -3,19 +3,41 @@ package com.niton.jchad.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import java.time.LocalTime;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-public class Message {
+@IdClass(MessageId.class)
+public class Message implements Serializable {
 	@Id
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Chat chat;
+
 	@Id
-	private LocalTime time;
-	private String text;
+	private LocalDateTime sendingTime;
+
+	@Id
+	@ManyToOne(optional = false)
+	private User sender;
+
+	@ManyToOne(optional = true)
+	private Message referenceMessage;
+
+	private LocalDateTime receiveTime;
+
+
+	@ManyToMany
+	private Set<User> readBy;
+	/**
+	 * Encrypted text
+	 */
+	private byte[] text;
+
+	public boolean isReadByAll() {
+		return readBy.containsAll(chat.getMembers());
+	}
 }

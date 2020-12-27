@@ -1,22 +1,43 @@
 package com.niton.jchad.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.niton.jchad.verification.ValidId;
+import com.niton.jchad.verification.ValidName;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Setter
 @Getter
-public class User {
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class User implements Serializable {
 	@Id
+	@ValidId
+	@NonNull
 	private String id;
+
+	@ValidName
+	@NotNull
 	private String displayName;
-	@OneToMany
-	private List<Chat> contacts;
+
+	@ManyToMany(mappedBy = "members")
+	private Set<Chat> chats;
+
 	private String profilePictureId;
 
+	//Todo: @NotNull Can be removed as soon as password sending per mail is enabled
+	@NotNull
+	@NonNull
+	private byte[] hash;
+
+	@Override
+	public String toString() {
+		return String.format("%s(%s)", getDisplayName(), getId());
+	}
 }
