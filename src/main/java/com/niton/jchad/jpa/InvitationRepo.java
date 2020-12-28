@@ -11,7 +11,7 @@ public interface InvitationRepo extends JpaRepository<Invitation, InvitationId> 
 	@Query("select inv from Invitation inv WHERE inv.id.invited.id = ?1")
 	Set<Invitation> findByInvited(String u);
 
-	boolean existsById(String user, long chat);
+	boolean existsById_InvitedAndId_Chat(String user, long chat);
 
-	void deleteById(String user, long chat);
+	void deleteById_InvitedAndId_Chat(String user, long chat);
 }

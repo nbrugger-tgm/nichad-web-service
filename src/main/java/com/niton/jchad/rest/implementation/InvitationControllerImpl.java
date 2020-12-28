@@ -10,7 +10,6 @@ import com.niton.jchad.model.Member;
 import com.niton.jchad.rest.InvitationController;
 import com.niton.jchad.rest.model.ChatResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -36,7 +35,7 @@ public class InvitationControllerImpl implements InvitationController {
 		checkAuthenticated(authenticated);
 		checkUserAndChatExistence(chat, user);
 		checkAdminPermission(chat, me);
-		if(!invitations.existsById(user,chat)){
+		if(!invitations.existsById_InvitedAndId_Chat(user, chat)){
 			invitations.save(new Invitation(users.getOne(me),new InvitationId(users.getOne(user),chats.getOne(chat)),message));
 		}else
 			throw new HttpClientErrorException(CONFLICT,"USER ALREADY INVITED");
@@ -87,7 +86,7 @@ public class InvitationControllerImpl implements InvitationController {
 	}
 
 	private void checkInvitationExistence(String user, long chat) {
-		if(!invitations.existsById(user,chat))
+		if(!invitations.existsById_InvitedAndId_Chat(user, chat))
 			throw new HttpClientErrorException(NOT_FOUND,"INVITATION NOT FOUND");
 	}
 
@@ -99,7 +98,7 @@ public class InvitationControllerImpl implements InvitationController {
 		checkAuthenticated(authenticated);
 		checkAuthority(user,me);
 		checkInvitationExistence(user,chat);
-		invitations.deleteById(user,chat);
+		invitations.deleteById_InvitedAndId_Chat(user, chat);
 		Chat c = chats.getOne(chat);
 		c.getMembers().add(new Member().withUser(users.getOne(user)));
 		chats.save(c);
