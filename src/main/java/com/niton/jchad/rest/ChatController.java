@@ -160,4 +160,21 @@ public interface ChatController {
 			@RequestAttribute(SessionHandler.AUTHENTICATED)
 					boolean authenticated
 	);
+
+	@PatchMapping("{chat}/member/{member}/permissions")
+	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
+	void promote(
+			@PathVariable
+					long chat,
+			@PathVariable
+					String member,
+			@ValidId
+			@Nullable
+			@RequestAttribute(SessionHandler.USER_ID)
+					String me,
+			@NotNull
+			@RequestAttribute(SessionHandler.AUTHENTICATED)
+					boolean authenticated
+	);
+
 }

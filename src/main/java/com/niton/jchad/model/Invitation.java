@@ -1,7 +1,6 @@
 package com.niton.jchad.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.EmbeddedId;
@@ -13,6 +12,9 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@With
 public class Invitation implements Serializable {
 	@ManyToOne(optional = false)
 	private User from;

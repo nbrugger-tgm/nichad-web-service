@@ -9,5 +9,9 @@ import java.util.Set;
 
 public interface InvitationRepo extends JpaRepository<Invitation, InvitationId> {
 	@Query("select inv from Invitation inv WHERE inv.id.invited.id = ?1")
-	Set<Invitation> findByUser(String u);
+	Set<Invitation> findByInvited(String u);
+
+	boolean existsById(String user, long chat);
+
+	void deleteById(String user, long chat);
 }

@@ -1,5 +1,7 @@
 package com.niton.jchad.rest;
 
+import com.niton.jchad.model.Chat;
+import com.niton.jchad.rest.model.ChatResponse;
 import com.niton.jchad.security.SessionHandler;
 import com.niton.jchad.verification.ValidId;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,15 +14,18 @@ import javax.validation.constraints.NotNull;
 
 import static com.niton.jchad.NiChadApplication.USER_SESSION;
 
+@RequestMapping
 public interface InvitationController {
 	@PutMapping("/chats/{chat}/invitations/{user}")
 	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
-	HttpStatus invite(
+	void invite(
 			@PathVariable
 					long chat,
 			@PathVariable
 			@ValidId
 					String user,
+			@RequestBody
+					String message,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)
@@ -32,7 +37,7 @@ public interface InvitationController {
 
 	@DeleteMapping("/chats/{chat}/invitations/{user}")
 	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
-	HttpStatus cancelInvitation(
+	void cancelInvitation(
 			@PathVariable
 					long chat,
 			@PathVariable
@@ -49,7 +54,7 @@ public interface InvitationController {
 
 	@DeleteMapping("/users/{user}/invitations/{chat}")
 	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
-	HttpStatus discardInvitation(
+	void discardInvitation(
 			@ValidId
 			@PathVariable
 					String user,
@@ -66,7 +71,7 @@ public interface InvitationController {
 
 	@PatchMapping("/users/{user}/invitations/{chat}")
 	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
-	HttpStatus acceptInvitation(
+	ChatResponse acceptInvitation(
 			@ValidId
 			@PathVariable
 					String user,
