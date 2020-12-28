@@ -1,6 +1,7 @@
 package com.niton.jchad.rest.implementation;
 
 import com.niton.jchad.ImageService;
+import com.niton.jchad.jpa.ChatRepo;
 import com.niton.jchad.jpa.InvitationRepo;
 import com.niton.jchad.jpa.UserRepo;
 import com.niton.jchad.model.Chat;
@@ -43,6 +44,9 @@ public class UserControllerImpl implements UserController {
 	private       ImageService                             imageService;
 	@Autowired
 	private       InvitationRepo                           invitations;
+
+	@Autowired
+	private ChatRepo chats;
 
 	@Autowired
 	public UserControllerImpl(UserRepo repo) {
@@ -114,7 +118,10 @@ public class UserControllerImpl implements UserController {
 				throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		String newId = RandomStringUtils.randomAlphanumeric(32);
+		String newId;
+		do{
+			newId = RandomStringUtils.randomAlphanumeric(32);
+		}while (imageService.hasImage(newId));
 		try {
 			imageService.saveFile(newId, multipartFile);
 		} catch (IOException e) {
@@ -172,7 +179,7 @@ public class UserControllerImpl implements UserController {
 		return users.getOne(id)
 		            .getMemberships().stream()
 		            .map(Member::getChat)
-		            .map(Chat::createResponeData)
+		            .map(c -> c.createResponeData(me))
 		            .collect(Collectors.toSet());
 	}
 
@@ -196,5 +203,20 @@ public class UserControllerImpl implements UserController {
 	@Override
 	public void removeAuthentication(String user, String me, @NotNull boolean authenticated) {
 		SessionHandler.manager.logout(user);
+	}
+
+	@Override
+	public UserRepo getUserRepo() {
+		return users;
+	}
+
+	@Override
+	public ChatRepo getChatRepo() {
+		return chats;
+	}
+
+	@Override
+	public InvitationRepo getInvitationRepo() {
+		return invitations;
 	}
 }
