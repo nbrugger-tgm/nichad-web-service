@@ -44,11 +44,19 @@ public class InvitationControllerImpl implements InvitationController {
 			throw new HttpClientErrorException(CONFLICT,"USER ALREADY INVITED");
 	}
 
-	private void checkUserAndChatExistence(long chat, String user) {
-		if(users.existsById(user))
-			throw new HttpClientErrorException(NOT_FOUND, "USER NOT FOUND");
-		if(chats.existsById(chat))
-			throw new HttpClientErrorException(NOT_FOUND,"CHAT NOT FOUND");
+	@Override
+	public UserRepo getUserRepo() {
+		return users;
+	}
+
+	@Override
+	public ChatRepo getChatRepo() {
+		return chats;
+	}
+
+	@Override
+	public InvitationRepo getInvitationRepo() {
+		return invitations;
 	}
 
 	@Override
@@ -74,19 +82,6 @@ public class InvitationControllerImpl implements InvitationController {
 		checkAuthority(user, me);
 		invitations.deleteById(new InvitationId(users.getOne(user),chats.getOne(chat)));
 	}
-	private void checkAdminPermission(long chat, String me) {
-		if (!chats.getOne(chat).getMember(me).isAdmin())
-			throw new HttpClientErrorException(UNAUTHORIZED, "INSUFFICIENT PERMISSIONS");
-	}
-
-	private void checkAuthenticated(@NotNull boolean authenticated) {
-		if (!authenticated)
-			throw new HttpClientErrorException(UNAUTHORIZED);
-	}
-	private void checkAuthority(String user, String me) {
-		if(!user.equals(me))
-			throw new HttpClientErrorException(UNAUTHORIZED, "INSUFFICIENT PERMISSIONS");
-	}
 
 	private void checkInvitationExistence(String user, long chat) {
 		if(!invitations.existsById_InvitedAndId_Chat(user, chat))
@@ -105,7 +100,7 @@ public class InvitationControllerImpl implements InvitationController {
 		Chat c = chats.getOne(chat);
 		c.getMembers().add(new Member().withUser(users.getOne(user)));
 		chats.save(c);
-		return c.createResponeData();
+		return c.createResponeData(me);
 	}
 
 	@Override
@@ -118,10 +113,5 @@ public class InvitationControllerImpl implements InvitationController {
 		Member m = c.getMember(me);
 		c.getMembers().remove(m);
 		chats.save(c);
-	}
-
-	private void checkMembership(String user, long chat) {
-		if(chats.getOne(chat).getMember(user) == null)
-			throw new HttpClientErrorException(BAD_REQUEST,"NOT A MEMBER");
 	}
 }

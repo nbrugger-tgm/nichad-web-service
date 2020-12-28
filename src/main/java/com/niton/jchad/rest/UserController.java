@@ -24,7 +24,7 @@ import java.util.Set;
 import static com.niton.jchad.NiChadApplication.USER_SESSION;
 
 @RequestMapping("users")
-public interface UserController {
+public interface UserController extends Endpoint{
 
 	@PutMapping("{id}")
 	HttpEntity<String> register(
