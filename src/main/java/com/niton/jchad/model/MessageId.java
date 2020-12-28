@@ -1,9 +1,6 @@
 package com.niton.jchad.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalTime;
@@ -12,6 +9,8 @@ import java.time.LocalTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@With
+@EqualsAndHashCode
 public class MessageId implements Serializable {
 	private User      sender;
 	private LocalTime sendingTime;

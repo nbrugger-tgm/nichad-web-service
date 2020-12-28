@@ -4,9 +4,7 @@ import com.niton.jchad.verification.ValidId;
 import com.niton.jchad.verification.ValidName;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
@@ -26,8 +24,8 @@ public class User implements Serializable {
 	@NotNull
 	private String displayName;
 
-	@ManyToMany(mappedBy = "members")
-	private Set<Chat> chats;
+	@OneToMany(mappedBy = "user")
+	private Set<Member> memberships;
 
 	private String profilePictureId;
 
