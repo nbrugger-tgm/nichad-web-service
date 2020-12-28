@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import static com.niton.jchad.NiChadApplication.USER_SESSION;
 
 @RequestMapping
-public interface InvitationController {
+public interface InvitationController extends Endpoint{
 	@PutMapping("/chats/{chat}/invitations/{user}")
 	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
 	InvitationResponse invite(

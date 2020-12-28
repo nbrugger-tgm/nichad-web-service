@@ -66,4 +66,8 @@ public class ImageService {
 		graphics.dispose();
 		return image;
 	}
+
+	public boolean hasImage(String newId) {
+		return Files.exists(folder.resolve(newId+".png"));
+	}
 }
