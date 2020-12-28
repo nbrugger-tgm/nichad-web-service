@@ -2,6 +2,7 @@ package com.niton.jchad.rest;
 
 import com.niton.jchad.model.Chat;
 import com.niton.jchad.rest.model.ChatResponse;
+import com.niton.jchad.rest.model.InvitationResponse;
 import com.niton.jchad.security.SessionHandler;
 import com.niton.jchad.verification.ValidId;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +19,7 @@ import static com.niton.jchad.NiChadApplication.USER_SESSION;
 public interface InvitationController {
 	@PutMapping("/chats/{chat}/invitations/{user}")
 	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
-	void invite(
+	InvitationResponse invite(
 			@PathVariable
 					long chat,
 			@PathVariable

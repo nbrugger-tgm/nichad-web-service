@@ -1,5 +1,6 @@
 package com.niton.jchad.model;
 
+import com.niton.jchad.rest.model.InvitationResponse;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
@@ -25,4 +26,8 @@ public class Invitation implements Serializable {
 	@Size(max = 500)
 	@Nullable
 	private String message;
+
+	public InvitationResponse response() {
+		return new InvitationResponse(from.getId(),id.getInvited().getId(),getMessage(),getId().getChat().getID());
+	}
 }

@@ -2,6 +2,7 @@ package com.niton.jchad.rest;
 
 import com.niton.jchad.model.Invitation;
 import com.niton.jchad.rest.model.ChatResponse;
+import com.niton.jchad.rest.model.InvitationResponse;
 import com.niton.jchad.rest.model.LoginResponse;
 import com.niton.jchad.rest.model.UserInformation;
 import com.niton.jchad.security.SessionHandler;
@@ -131,7 +132,7 @@ public interface UserController {
 
 	@GetMapping("{user}/invitations")
 	@Operation(security = {@SecurityRequirement(name = USER_SESSION)})
-	Set<Invitation> getInvitations(
+	Set<InvitationResponse> getInvitations(
 			@PathVariable
 			@ValidId
 					String user,

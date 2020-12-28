@@ -9,6 +9,7 @@ import com.niton.jchad.model.Member;
 import com.niton.jchad.model.User;
 import com.niton.jchad.rest.UserController;
 import com.niton.jchad.rest.model.ChatResponse;
+import com.niton.jchad.rest.model.InvitationResponse;
 import com.niton.jchad.rest.model.LoginResponse;
 import com.niton.jchad.rest.model.UserInformation;
 import com.niton.jchad.security.SessionHandler;
@@ -176,11 +177,13 @@ public class UserControllerImpl implements UserController {
 	}
 
 	@Override
-	public Set<Invitation> getInvitations(String user, String me, @NotNull boolean authenticated) {
+	public Set<InvitationResponse> getInvitations(String user, String me, @NotNull boolean authenticated) {
 		if (!isSelf(user, me, authenticated)) {
 			throw new HttpClientErrorException(UNAUTHORIZED);
 		}
-		return invitations.findByInvited(user);
+		return invitations.findByInvited(user).stream()
+		                  .map(Invitation::response)
+		                  .collect(Collectors.toSet());
 	}
 
 	@Override

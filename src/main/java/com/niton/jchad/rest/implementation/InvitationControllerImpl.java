@@ -9,6 +9,7 @@ import com.niton.jchad.model.InvitationId;
 import com.niton.jchad.model.Member;
 import com.niton.jchad.rest.InvitationController;
 import com.niton.jchad.rest.model.ChatResponse;
+import com.niton.jchad.rest.model.InvitationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
@@ -27,16 +28,18 @@ public class InvitationControllerImpl implements InvitationController {
 	private ChatRepo chats;
 
 	@Override
-	public void invite(long chat,
-	                         String user,
-	                         String message,
-	                         String me,
-	                         @NotNull boolean authenticated) {
+	public InvitationResponse invite(long chat,
+	                                 String user,
+	                                 String message,
+	                                 String me,
+	                                 @NotNull boolean authenticated) {
 		checkAuthenticated(authenticated);
 		checkUserAndChatExistence(chat, user);
 		checkAdminPermission(chat, me);
 		if(!invitations.existsById_InvitedAndId_Chat(user, chat)){
-			invitations.save(new Invitation(users.getOne(me),new InvitationId(users.getOne(user),chats.getOne(chat)),message));
+			Invitation inv = new Invitation(users.getOne(me),new InvitationId(users.getOne(user),chats.getOne(chat)),message);
+			invitations.save(inv);
+			return inv.response();
 		}else
 			throw new HttpClientErrorException(CONFLICT,"USER ALREADY INVITED");
 	}
