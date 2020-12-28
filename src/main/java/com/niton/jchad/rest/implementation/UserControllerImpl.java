@@ -5,6 +5,7 @@ import com.niton.jchad.jpa.InvitationRepo;
 import com.niton.jchad.jpa.UserRepo;
 import com.niton.jchad.model.Chat;
 import com.niton.jchad.model.Invitation;
+import com.niton.jchad.model.Member;
 import com.niton.jchad.model.User;
 import com.niton.jchad.rest.UserController;
 import com.niton.jchad.rest.model.ChatResponse;
@@ -57,6 +58,7 @@ public class UserControllerImpl implements UserController {
 				.withName(c.getName())
 				.withMembers(c.getMembers()
 				              .stream()
+				              .map(Member::getUser)
 				              .map(UserControllerImpl::toUserInformation)
 				              .collect(Collectors.toSet()));
 	}
@@ -89,8 +91,9 @@ public class UserControllerImpl implements UserController {
 	private boolean accessible(String id, String me, boolean authenticated) {
 		System.out.println("id = " + id + ", me = " + me + ", authenticated = " + authenticated);
 		return authenticated && (id.equals(me) || users.getOne(me)
-		                                               .getChats()
+		                                               .getMemberships()
 		                                               .stream()
+		                                               .map(Member::getChat)
 		                                               .anyMatch(c -> c.isMember(id)));
 	}
 
@@ -179,7 +182,8 @@ public class UserControllerImpl implements UserController {
 			throw new HttpClientErrorException(UNAUTHORIZED);
 		}
 		return users.getOne(id)
-		            .getChats().stream()
+		            .getMemberships().stream()
+		            .map(Member::getChat)
 		            .map(UserControllerImpl::mapChat)
 		            .collect(Collectors.toSet());
 	}

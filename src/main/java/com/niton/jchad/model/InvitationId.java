@@ -12,6 +12,7 @@ import java.io.Serializable;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class InvitationId implements Serializable {
 	@ManyToOne(optional = false)
 	public User invited;
