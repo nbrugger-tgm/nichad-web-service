@@ -48,20 +48,7 @@ public class UserControllerImpl implements UserController {
 		this.users   = repo;
 	}
 
-	private static UserInformation toUserInformation(User m) {
-		return new UserInformation(m.getDisplayName(), m.getProfilePictureId());
-	}
 
-	private static ChatResponse mapChat(Chat c) {
-		return new ChatResponse()
-				.withId(c.getID())
-				.withName(c.getName())
-				.withMembers(c.getMembers()
-				              .stream()
-				              .map(Member::getUser)
-				              .map(UserControllerImpl::toUserInformation)
-				              .collect(Collectors.toSet()));
-	}
 
 	@Override
 	public ResponseEntity<String> register(String id,
@@ -184,7 +171,7 @@ public class UserControllerImpl implements UserController {
 		return users.getOne(id)
 		            .getMemberships().stream()
 		            .map(Member::getChat)
-		            .map(UserControllerImpl::mapChat)
+		            .map(Chat::createResponeData)
 		            .collect(Collectors.toSet());
 	}
 
@@ -193,7 +180,7 @@ public class UserControllerImpl implements UserController {
 		if (!isSelf(user, me, authenticated)) {
 			throw new HttpClientErrorException(UNAUTHORIZED);
 		}
-		return invitations.findByUser(user);
+		return invitations.findByInvited(user);
 	}
 
 	@Override

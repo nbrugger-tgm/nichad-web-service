@@ -26,6 +26,8 @@ public class Member {
 	@Id
 	private Chat chat;
 
+	private boolean isAdmin = false;
+
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor

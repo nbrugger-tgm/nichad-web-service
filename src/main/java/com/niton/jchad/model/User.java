@@ -1,5 +1,6 @@
 package com.niton.jchad.model;
 
+import com.niton.jchad.rest.model.UserInformation;
 import com.niton.jchad.verification.ValidId;
 import com.niton.jchad.verification.ValidName;
 import lombok.*;
@@ -37,5 +38,9 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return String.format("%s(%s)", getDisplayName(), getId());
+	}
+
+	public UserInformation getUserInformation() {
+		return new UserInformation(getDisplayName(), getProfilePictureId());
 	}
 }
