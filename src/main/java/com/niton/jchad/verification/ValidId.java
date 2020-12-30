@@ -2,6 +2,7 @@ package com.niton.jchad.verification;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -17,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, PARAMETER})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
+@Valid
 @Documented
 public @interface ValidId {
 	String message() default "This is not an valid ID";
