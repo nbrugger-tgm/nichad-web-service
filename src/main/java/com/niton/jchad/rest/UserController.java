@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -37,6 +38,7 @@ public interface UserController extends Endpoint{
 					String displayName,
 			@RequestParam
 			@Size(min = 8, max = 128)
+			@Valid
 					String password
 	);
 
@@ -61,6 +63,7 @@ public interface UserController extends Endpoint{
 			@ValidId
 					String id,
 			@RequestParam
+			@Valid
 					String password,
 			HttpServletRequest request
 	);
@@ -105,6 +108,7 @@ public interface UserController extends Endpoint{
 					String id,
 			@NotNull
 			@RequestBody
+			@Valid
 					UserInformation update,
 			@ValidId
 			@Nullable
