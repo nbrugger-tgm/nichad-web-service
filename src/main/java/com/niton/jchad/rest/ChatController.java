@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
@@ -65,6 +68,7 @@ public interface ChatController extends Endpoint {
 			@PathVariable
 					long chat,
 			@RequestBody
+			@Valid
 				ChatEditRequest editRequest,
 			@ValidId
 			@Nullable
@@ -85,6 +89,7 @@ public interface ChatController extends Endpoint {
 					byte[] msg,
 			@Past
 			@PathVariable
+			@Valid
 					LocalDateTime sendingTime,
 			@ValidId
 			@Nullable
@@ -103,11 +108,14 @@ public interface ChatController extends Endpoint {
 					byte[] msg,
 			@Past
 			@PathVariable
+			@Valid
 					LocalDateTime messageTime,
 			@PathVariable("sender")
+			@ValidId
 					String originalSender,
 			@Past
 			@PathVariable
+			@Valid
 					LocalDateTime answerTime,
 			@ValidId
 			@Nullable
@@ -138,8 +146,10 @@ public interface ChatController extends Endpoint {
 			@PathVariable
 					long chat,
 			@RequestParam
+			@Valid
 					LocalDateTime from,
 			@RequestParam
+			@Valid
 					LocalDateTime to,
 			@ValidId
 			@Nullable
@@ -156,6 +166,9 @@ public interface ChatController extends Endpoint {
 			@PathVariable
 					long chat,
 			@RequestParam
+			@Valid
+			@Min(1)
+			@Max(1024)
 					int count,
 			@ValidId
 			@Nullable
@@ -173,8 +186,13 @@ public interface ChatController extends Endpoint {
 			@PathVariable
 					long chat,
 			@RequestParam
+			@Valid
+			@Min(0)
 					int from,
 			@RequestParam
+			@Valid
+			@Min(1)
+			@Max(1024)
 					int count,
 			@ValidId
 			@Nullable
@@ -205,8 +223,10 @@ public interface ChatController extends Endpoint {
 			@PathVariable
 					long chat,
 			@RequestParam
+			@Valid
 					LocalDateTime msgSendingTime,
 			@PathVariable("sender")
+			@ValidId
 					String senderId,
 			@ValidId
 			@Nullable
@@ -223,6 +243,7 @@ public interface ChatController extends Endpoint {
 			@PathVariable
 					long chat,
 			@PathVariable
+			@ValidId
 					String member,
 			@ValidId
 			@Nullable
@@ -235,7 +256,8 @@ public interface ChatController extends Endpoint {
 
 	@GetMapping("{chat}/image")
 	StreamingResponseBody getChatImage(
-			@PathVariable long chat,
+			@PathVariable
+					long chat,
 			@ValidId
 			@Nullable
 			@RequestAttribute(SessionHandler.USER_ID)

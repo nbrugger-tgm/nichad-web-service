@@ -25,7 +25,7 @@ public interface InvitationController extends Endpoint{
 			@PathVariable
 			@ValidId
 					String user,
-			@RequestBody
+			@RequestBody(required = false)
 					String message,
 			@ValidId
 			@Nullable
